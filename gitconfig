@@ -1,0 +1,56 @@
+[user]
+	name = VI
+	email = 
+[core]
+	longpaths = true
+	autocrlf = false
+	ignorecase = true
+	editor = 'C:/ProgramData/Microsoft VS Code Insiders/Code - Insiders.exe' --wait
+	excludesfile = C:\\Users\\USER\\.gitignore
+[alias]
+	tree = !git log --graph --source --abbrev-commit --decorate --format=format:'%C(Yellow)%h%C(reset) - %C(bold green)(%ad)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)' -30 --date=format:'%Y-%m-%d %H:%M:%S'
+	tree-only = log --graph --decorate --pretty='%C(Yellow)%h  %C(reset)%ad (%C(Green)%cr%C(reset))%x09 %C(Cyan)%an: %C(reset)%s %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)' --date=format:'%Y-%m-%d %H:%M:%S' -30
+	f = fetch --all --prune --tags --force
+	p = pull
+	c = checkout
+	d = "!git log --no-merges --oneline \"$1\" ^dev #"
+	sapply = "!f() { git stash pop \"$(git stash list | awk -F: --posix -vpat=\"$*\" \"$ 0 ~ pat {print $ 1; exit}\")\"; }; f"
+	sync = !git f && git stash save "sync" && git pull && git pull && git sapply "sync"
+	tagz = "!git tag $1 && git push origin $1 #"
+	pkg = "!git c master && git pull && git merge dev && git push && git tagz $1 #"
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[mergetool]
+	trustExitCode = true
+	prompt = true
+[difftool]
+	prompt = true
+[pull]
+	rebase = true
+[merge]
+	ff = false
+	tool = kdiff3
+[mergetool "vscode"]
+	cmd = code-insiders --wait $MERGED
+	keepBackup = false
+	trustExitCode = true
+[difftool "vscode"]
+	cmd = code-insiders --diff $LOCAL $REMOTE
+	keepBackup = false
+	trustExitCode = true
+[difftool "vsdiffmerge"]
+	cmd = \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer\\vsdiffmerge.exe\" \"$LOCAL\" \"$REMOTE\" //t //ignorespace
+	keepBackup = false
+[mergetool "vsdiffmerge"]
+	cmd = \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer\\vsdiffmerge.exe\" \"$REMOTE\" \"$LOCAL\" \"$BASE\" \"$MERGED\" //m //ignorespace
+	keepBackup = false
+	trustExitCode = true
+[diff]
+	guitool = kdiff3
+[fetch]
+	prune = false
+[rebase]
+	autoStash = false
