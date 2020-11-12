@@ -13,11 +13,13 @@
 	f = fetch --all --prune --tags --force
 	p = pull
 	c = checkout
+	m = merge
+	cp = "!git c $1 && git pull #"
 	d = "!git log --no-merges --oneline \"$1\" ^dev #"
 	sapply = "!f() { git stash pop \"$(git stash list | awk -F: --posix -vpat=\"$*\" \"$ 0 ~ pat {print $ 1; exit}\")\"; }; f"
 	sync = !git f && git stash save "sync" && git pull && git pull && git sapply "sync"
 	tagz = "!git tag $1 && git push origin $1 #"
-	pkg = "!git c master && git pull && git merge dev && git push && git tagz $1 #"
+	pkg = "!git c dev && git pull && git c master && git pull && git merge dev && git push && git tagz $1 #"
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
